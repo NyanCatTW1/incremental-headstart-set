@@ -1,7 +1,7 @@
-function getDefaultPlayer = () => ({
+var getDefaultPlayer = () => ({
   lastUpdate: new Date().getTime()
 })
-player = getDefaultPlayer()
+var player = getDefaultPlayer()
 var diffMultiplier = 1
 let gameLoopIntervalId = 0
 
