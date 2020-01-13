@@ -13,7 +13,7 @@ function updateDisplay() {
 function gameLoop(diff) {
   // 1 diff = 0.001 seconds
   var thisUpdate = new Date().getTime()
-  diff = Math.min(thisUpdate - player.lastUpdate, 21600000) * diffMultiplier
+  diff = (diff || Math.min(thisUpdate - player.lastUpdate, 21600000)) * diffMultiplier
   //if (diffMultiplier > 1) console.log("SHAME")
   //else if (diffMultiplier < 1) console.log("SLOWMOTION")
 
