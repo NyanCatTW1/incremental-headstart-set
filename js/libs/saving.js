@@ -58,6 +58,7 @@ function saveGame() {
 
 function loadGame(save, imported = false) {
   try {
+    if (save === undefined) save = localStorage.getItem(saveName)
     var save = JSON.parse(atob(save))
     let reference = window[initPlayerFunctionName]()
     let refLists = listItems(reference)
