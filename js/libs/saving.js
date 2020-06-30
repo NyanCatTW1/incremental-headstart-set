@@ -6,7 +6,11 @@ let initPlayerFunctionName = "getDefaultPlayer"
 let playerVarName = "player" // DO NOT USE THE WORD "SAVE"
 let importDangerAlertText = "Your imported save seems to be missing some values, which means importing this save might be destructive, if you have made a backup of your current save and are sure about importing this save please press OK, if not, press cancel and the save will not be imported."
 let versionTagName = "version"
-let arrayTypes = getArrayTypeList() // TFW you make code to hardcode for you
+let decimalLibraryVarName = "Decimal" // MAKE SURE YOU CHANGE THIS IF YOU ARE USING OTHER DECIMAL LIBRARIES
+let arrayTypes = {
+  // For EACH array in your player variable, put a key/value to define its type like I did below
+  storeProgramsBought: "String"
+}
 
 function onImportError() {
   alert("Error: Imported save is in invalid format, please make sure you've copied the save correctly and isn't just typing gibberish.")
@@ -31,7 +35,7 @@ function onLoad() { // Put your savefile updating codes here
     ["itemAmounts", "itemCosts", "itemPowers", "itemCostScales", "itemAmountCaps"].forEach(function (itemProperty) {
       Object.defineProperty(player[itemProperty], "development", Object.getOwnPropertyDescriptor(player[itemProperty], "upgrade"));
       delete player[itemProperty].upgrade;
-      player[itemProperty].development = player[itemProperty].development.map(value => new Decimal(value))
+      player[itemProperty].development = player[itemProperty].development.map(value => new window[decimalLibraryVarName](value))
     })
   }
   changeTab(player.storyId < 6 ? "generator" : "buildings")
@@ -78,9 +82,9 @@ function loadGame(save, imported = false) {
       if (value != versionTagName) _.set(save, value, _.get(reference, value))
     })
 
-    let decimalList = saveLists[1].diff(refLists[1])
+    let decimalList = [...new Set(saveLists[1].diff(refLists[1]).concat(findOmegaNumVars(saveLists[2])))]
     decimalList.forEach(function (value) {
-      _.set(save, value, new Decimal(_.get(save, value)))
+      _.set(save, value, new window[decimalLibraryVarName](_.get(save, value)))
     })
 
     saveLists[2].forEach(function (value) {
@@ -105,10 +109,22 @@ function loadGame(save, imported = false) {
   }
 }
 
+function findOmegaNumVars(arrayList) {
+  let ret = []
+  for (let varName of arrayList) {
+    if (varName.endsWith(".array")) {
+      ret.push(varName.slice(0, -6))
+    }
+  }
+  return ret
+}
+
 function getMapFunc(type) {
   switch (type) {
   case "Decimal":
-    return x => new Decimal(x)
+    return x => new window[decimalLibraryVarName](x)
+  case "Number":
+    return x => Number(x)
   default:
     return x => x
   }
@@ -132,7 +148,7 @@ function listItems(data, nestIndex = "") {
     case "object":
       if (value instanceof Array) {
         arrayList.push(thisIndex)
-      } else if (!(value instanceof Decimal)) {
+      } else if (!(value instanceof window[decimalLibraryVarName])) {
         let temp = listItems(value, thisIndex)
         itemList = itemList.concat(temp[0])
         stringList = stringList.concat(temp[1])
