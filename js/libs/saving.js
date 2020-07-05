@@ -12,6 +12,9 @@ let arrayTypes = {
   // For EACH array in your player variable, put a key/value to define its type like I did below
   storeProgramsBought: "String"
 }
+let hardResetConfirmText = [ // You can add more strings if you want multi time confirmation
+  "Are you sure about doing this? YOU WILL LOSE EVERYTHING YOU HAVE WITHOUT ANY REWARDS!"
+];
 
 function onImportError() {
   alert("Error: Imported save is in invalid format, please make sure you've copied the save correctly and isn't just typing gibberish.")
@@ -50,6 +53,15 @@ function onLoad() { // Put your savefile updating codes here
   updateTabDisplay()
 }
 // Only change things above to fit your game UNLESS you know what you're doing
+
+function hardReset() {
+  for (let confirmText of hardResetConfirmText) {
+    if (!confirm(confirmText)) return false;
+  }
+  window[playerVarName] = window[initPlayerFunctionName]();
+  saveGame();
+  location.reload();
+}
 
 Array.prototype.diff = function (a) {
   return this.filter(function (i) {
