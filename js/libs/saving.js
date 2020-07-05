@@ -1,4 +1,4 @@
-// THE saving library, by Nyan Cat 2019
+// THE saving library, by Nyan Cat 2020
 // Note: Make sure your saving variable is defined by VAR and not LET, otherwise it won't work
 // You need Lodash for this to work https://lodash.com/
 // And please, just please make sure you change the stuff below to suit your code, otherwise it will burst on fire
