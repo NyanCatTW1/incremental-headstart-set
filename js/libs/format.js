@@ -25,7 +25,7 @@ function formatPercent(value) {
   return `${value.times(100).toFixed(1)}%`
 }
 
-nf = function(money) {
+var nf = function(money) {
   return formatValue(money, 2, 3)
 }
 
