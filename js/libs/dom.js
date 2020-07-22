@@ -6,7 +6,7 @@ function updateElement(elm, text) {
 var ue = updateElement
 
 function showElement(elm, display = "") {
-  ge(elm).style.display = style
+  ge(elm).style.display = display
 }
 var se = showElement
 
