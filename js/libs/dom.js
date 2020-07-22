@@ -5,13 +5,14 @@ function updateElement(elm, text) {
 }
 var ue = updateElement
 
-function showElement(elm, style = "") {
-  ge(elm).display.style = style
+function showElement(elm, display = "") {
+  ge(elm).style.display = style
 }
 var se = showElement
 
-function decideElement(elm, bool, showStyle = "") {
+function decideElement(elm, bool, showStyle = "", onTrue = function() {}) {
   se(elm, bool ? showStyle : "none")
+  if (bool) onTrue()
 }
 var de = decideElement
 
