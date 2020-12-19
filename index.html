@@ -12,7 +12,11 @@
     <script src="js/libs/lodash.min.js"></script> <!-- Download manually from https://raw.githubusercontent.com/lodash/lodash/4.17.15-npm/lodash.min.js-->
 
     <script>
-      document.addEventListener("DOMContentLoaded", function() {
+      function sleep(ms) {
+        return new Promise(resolve => setTimeout(resolve, ms));
+      }
+
+      document.addEventListener("DOMContentLoaded", async function() {
         const loadList = [
           // DO NOT TOUCH THESE LINES
           "js/libs/clipboard.js",
@@ -20,7 +24,7 @@
           "js/libs/format.js",
           "js/libs/saving.js",
 
-          // Add the scripts used by your game below
+          // Add your scripts below
           "js/main.js"
         ]
         const cacheBust = (new Date()).getTime()
@@ -28,7 +32,10 @@
           var script = document.createElement("script")
           script.src = file + "?v=" + cacheBust
           document.body.appendChild(script)
+          await sleep(20)
         }
+
+        startGame()
       });
     </script>
   </head>
