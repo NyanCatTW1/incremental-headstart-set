@@ -32,9 +32,10 @@
           var script = document.createElement("script")
           script.src = file + "?v=" + cacheBust
           document.body.appendChild(script)
-          await sleep(33)
+          await sleep(50)
         }
 
+        await sleep(200)
         startGame()
       });
     </script>
