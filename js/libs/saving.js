@@ -1,6 +1,6 @@
 // THE saving library, by Nyan Cat 2020
 // Note: Make sure your saving variable is defined by VAR and not LET, otherwise it won't work
-// You need Lodash for this to work https://lodash.com/
+// You need the full version of Lodash for this to work https://lodash.com/
 // And please, just please make sure you change the stuff below to suit your code, otherwise it will burst on fire
 const saveName = "PUSave"
 const initPlayerFunctionName = "getDefaultPlayer"
@@ -54,10 +54,15 @@ function onLoad() { // Put your savefile updating codes here
   updateAllResearchEffect()
   updateTabDisplay()
 }
-// Only change things above to fit your game UNLESS you know what you're doing
+
+// This will be called when the savefile cannot be parsed into JSON at all, after this function is called, the game will do a hard reset automatically, so allow the player to backup if you wish!
+function handleBrokenSave() { 
+  alert("Your save is corrupted, which means you will be forced to do a hard reset before proceeding, sorry!")
+  if (confirm("Would you like to export the save for backup? THIS IS THE ONLY CHANCE TO KEEP THE OLD SAVE")) exportGame()
+  alert("Now we will perform a hard reset, if you decide to export before doing it, REFRESH NOW AND CHOOSE YES IN THE PREVIOUS PROMPT!")
+}
 
 // Only change things above to fit your game UNLESS you know what you're doing
-
 function exportSave() {
   copyStringToClipboard(btoa(JSON.stringify(window[playerVarName])))
   onExportSuccess()
@@ -91,13 +96,18 @@ function saveGame() {
 function loadGame(save, imported = false) {
   try {
     if (save === undefined) save = localStorage.getItem(saveName)
+    if (save === null) {
+      console.log("No savefile in localstorage, creating new savefile...")
+      return
+    }
+
     var save = JSON.parse(atob(save))
     let reference = window[initPlayerFunctionName]()
     let refLists = listItems(reference)
     let saveLists = listItems(save)
     let missingItem = refLists[0].diff(saveLists[0])
     if (missingItem.includes("save")) {
-      console.log("Unrecoverable corrupted save detected, loading default save...")
+      handleBrokenSave()
       return
     }
     if (missingItem.length != 0 && imported) {
