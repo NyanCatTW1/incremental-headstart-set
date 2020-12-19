@@ -8,15 +8,12 @@
     <meta name="description" content="This is a template." />
     <meta name="author" content="Nyan Cat" />
 
+    <script src="js/libs/loadjs.min.js"></script> <!-- Download manually from https://raw.githubusercontent.com/muicss/loadjs/master/dist/loadjs.min.js -->
     <script src="js/libs/break_eternity.min.js"></script> <!-- Download manually from https://raw.githubusercontent.com/Patashu/break_eternity.js/master/break_eternity.min.js -->
     <script src="js/libs/lodash.min.js"></script> <!-- Download manually from https://raw.githubusercontent.com/lodash/lodash/4.17.15-npm/lodash.min.js-->
 
     <script>
-      function sleep(ms) {
-        return new Promise(resolve => setTimeout(resolve, ms));
-      }
-
-      document.addEventListener("DOMContentLoaded", async function() {
+      document.addEventListener("DOMContentLoaded", function() {
         const loadList = [
           // DO NOT TOUCH THESE LINES
           "js/libs/clipboard.js",
@@ -28,15 +25,14 @@
           "js/main.js"
         ]
         const cacheBust = (new Date()).getTime()
-        for (let file of loadList) {
-          var script = document.createElement("script")
-          script.src = file + "?v=" + cacheBust
-          document.body.appendChild(script)
-          await sleep(50)
+        for (let i = 0; i < loadList.length; i++) {
+          loadList[i] += "?v=" + cacheBust
         }
 
-        await sleep(200)
-        startGame()
+        loadjs(loadList, {
+          success: function() { startGame() },
+          async: false
+        })
       });
     </script>
   </head>
